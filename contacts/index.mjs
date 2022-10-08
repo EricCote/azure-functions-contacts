@@ -35,12 +35,12 @@ export default async function contacts(context, req, ...args) {
 
 async function get(context, req, tableClient) {
   const id = context.bindingData.id;
-  if (id === "reset"){
+  if (id === "reset") {
     await deleteAll(tableClient);
     await createContacts(tableClient);
     return;
   }
-  
+
   if (id) {
     const contact = await tableClient.getEntity("contact", id);
     context.res = {
@@ -69,7 +69,7 @@ async function post(context, req, tableClient) {
 
   context.res = {
     status: 201,
-    body: formatData( entity),
+    body: formatData(entity),
     location: `api/contacts/${entity.rowKey}`,
   };
 }
@@ -95,8 +95,8 @@ async function del(context, req, tableClient) {
   if (id === "all") {
     await deleteAll();
     context.res = {
-        status: 204,
-      };
+      status: 204,
+    };
     return;
   }
 
@@ -107,76 +107,70 @@ async function del(context, req, tableClient) {
   };
 }
 
-
-async function deleteAll(tableClient){
-    const query = tableClient.listEntities();
-    for await (const contact of query) {
-      await tableClient.deleteEntity(contact.partitionKey, contact.rowKey);
-    }
+async function deleteAll(tableClient) {
+  const query = tableClient.listEntities();
+  for await (const contact of query) {
+    await tableClient.deleteEntity(contact.partitionKey, contact.rowKey);
+  }
 }
 
-async function createContacts(tableClient){
-    const contacts= [
-        {
-          id: 1,
-          firstName: "Eric",
-          lastName: "Côté",
-          email: "ericcote@reactAcademy.live"
-        },
-        {
-          id: 2,
-          firstName: "Satya",
-          lastName: "Nadella",
-          email: "satyan@microsoft.com"
-        },
-        {
-          id: 3,
-          firstName: "Mark",
-          lastName: "Zuckerberg",
-          email: "zuck@fb.com"
-        },
-        {
-          id: 4,
-          firstName: "Jeff",
-          lastName: "Bezos",
-          email: "jeff@amazon.com"
-        },
-        {
-          id: 5,
-          firstName: "Tim",
-          lastName: "Cook",
-          email: "tcook@apple.com"
-        },
-        {
-          id: 6,
-          firstName: "Sundar",
-          lastName: "Pichai",
-          email: "sundar@google.com"
-        }
-      ]
-
-      for (const contact of contacts) {
-        delete contact["id"];
-        const entity = {
-          partitionKey: "contact",
-          rowKey: uuidv4(),
-          ...contact,
-        };
-        await tableClient.createEntity(entity);
-      }
-
-    }
-
-
-function formatData(data)
-{
-    if ((typeof data) === "object")
+async function createContacts(tableClient) {
+  const contacts = [
     {
-        const {rowKey:id, firstName, lastName, email} = data
-        return {id, firstName, lastName,email }
-    }
-    if ((typeof data) === "array")
+      id: 1,
+      firstName: "Eric",
+      lastName: "Côté",
+      email: "ericcote@reactAcademy.live",
+    },
     {
-        return data.map(row => (formatData(row)))
-    }
+      id: 2,
+      firstName: "Satya",
+      lastName: "Nadella",
+      email: "satyan@microsoft.com",
+    },
+    {
+      id: 3,
+      firstName: "Mark",
+      lastName: "Zuckerberg",
+      email: "zuck@fb.com",
+    },
+    {
+      id: 4,
+      firstName: "Jeff",
+      lastName: "Bezos",
+      email: "jeff@amazon.com",
+    },
+    {
+      id: 5,
+      firstName: "Tim",
+      lastName: "Cook",
+      email: "tcook@apple.com",
+    },
+    {
+      id: 6,
+      firstName: "Sundar",
+      lastName: "Pichai",
+      email: "sundar@google.com",
+    },
+  ];
+
+  for (const contact of contacts) {
+    delete contact["id"];
+    const entity = {
+      partitionKey: "contact",
+      rowKey: uuidv4(),
+      ...contact,
+    };
+    await tableClient.createEntity(entity);
+  }
+}
+
+function formatData(data) {
+  if (Array.isArray(data)) {
+    return data.map((row) => formatData(row));
+  }
+  if (typeof data === "object") {
+    const { rowKey: id, firstName, lastName, email } = data;
+    return { id, firstName, lastName, email };
+  }
 }
