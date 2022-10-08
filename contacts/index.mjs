@@ -44,7 +44,7 @@ async function get(context, req, tableClient) {
   if (id) {
     const contact = await tableClient.getEntity("contact", id);
     context.res = {
-      body: contact,
+      body: formatData(contact),
     };
   } else {
     const contacts = [];
@@ -53,7 +53,7 @@ async function get(context, req, tableClient) {
       contacts.push(contact);
     }
     context.res = {
-      body: contacts,
+      body: formatData(contacts),
     };
   }
 }
@@ -69,7 +69,7 @@ async function post(context, req, tableClient) {
 
   context.res = {
     status: 201,
-    body: entity,
+    body: formatData( entity),
     location: `api/contacts/${entity.rowKey}`,
   };
 }
