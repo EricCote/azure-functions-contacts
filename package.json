@@ -1,0 +1,16 @@
+{
+  "name": "react-contacts",
+  "version": "1.0.0",
+  "description": "Project for a sample api hosted on Azure functions",
+  "scripts": {
+    "start": "func start",
+    "test": "echo \"No tests yet...\""
+  },
+  "dependencies": {
+    "@azure/data-tables": "^13.2.0",
+    "uuid": "^9.0.0"
+  },
+  "devDependencies": {
+    "azure-functions-core-tools": "^4.x"
+  }
+}
