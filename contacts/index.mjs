@@ -67,6 +67,12 @@ async function post(context, req, tableClient) {
   };
   await tableClient.createEntity(entity);
 
+  context.bindings.actions = {
+    "actionName": "sendToAll",
+    "data": `Data Added`,
+    "dataType": "text"
+  };
+
   context.res = {
     status: 201,
     body: formatData(entity),
@@ -83,6 +89,12 @@ async function put(context, req, tableClient) {
     rowKey: id,
   };
   await tableClient.updateEntity(entity);
+
+  context.bindings.actions = {
+    "actionName": "sendToAll",
+    "data": `Data Added`,
+    "dataType": "text"
+  };
 
   context.res = {
     body: formatData(entity),
@@ -101,6 +113,12 @@ async function del(context, req, tableClient) {
   }
 
   await tableClient.deleteEntity("contact", id);
+
+  context.bindings.actions = {
+    "actionName": "sendToAll",
+    "data": `Data Added`,
+    "dataType": "text"
+  };
 
   context.res = {
     status: 204,

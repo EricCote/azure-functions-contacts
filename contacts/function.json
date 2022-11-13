@@ -17,6 +17,13 @@
         "type": "http",
         "direction": "out",
         "name": "res"
+      },
+      {
+        "type": "webPubSubConnection",
+        "name": "actions",
+        "hub": "notification",
+        "direction": "out"
       }
+
     ]
   }
