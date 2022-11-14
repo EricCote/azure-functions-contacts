@@ -19,7 +19,7 @@
         "name": "res"
       },
       {
-        "type": "webPubSubConnection",
+        "type": "webPubSub",
         "name": "actions",
         "hub": "notification",
         "direction": "out"
